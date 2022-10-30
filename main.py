@@ -13,7 +13,6 @@ with open("config.toml", "rb") as f:
         input("Press enter to continue...")
         exit(1)
 
-
 try:
     root = config["user"]["root"]
     root = os.path.normpath(root)
@@ -97,7 +96,6 @@ def main():
         os.system(f"title Coeus ({version})")
         print(ascii_header())
         while True:
-
             user_input = input(">>> ")
             os.system("cls")
             print(ascii_header())
@@ -108,8 +106,9 @@ def main():
                 break
             else:
                 matches = autocomplete(dirs, user_input)
-                if matches:
-                    print("")
+                print("")
+                if not matches:
+                    print("No matches found")
                 for match, ratio in matches.items():
                     if any(ratio[0] == 100 for ratio in matches.values()):
                         print(f"{ratio[0]:3}: {match}")
