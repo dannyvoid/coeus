@@ -14,11 +14,11 @@ try:
     dirs = next(os.walk(root))[1]
 except StopIteration:
     print("No directories found or root is invalid!")
-    print(f"Root: {root}")
+    print(f"user root: {root}")
     input("Press enter to exit...")
     exit()
 
-version = config["app"]["version"]
+version = config["dev"]["version"]
 
 
 def ascii_header():
@@ -98,11 +98,11 @@ def main():
                 matches = autocomplete(dirs, user_input)
                 if matches:
                     print("")
-                for model, ratio in matches.items():
+                for match, ratio in matches.items():
                     if any(ratio[0] == 100 for ratio in matches.values()):
-                        print(f"{ratio[0]:3}: {model}")
+                        print(f"{ratio[0]:3}: {match}")
                     else:
-                        print(f"{ratio[0]}: {model}")
+                        print(f"{ratio[0]}: {match}")
                 print("")
 
     except KeyboardInterrupt:
