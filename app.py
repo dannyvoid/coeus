@@ -1,6 +1,5 @@
-import os
+import os, tomli
 from fuzzywuzzy import fuzz
-import tomli
 
 
 with open("config.toml", "rb") as f:
