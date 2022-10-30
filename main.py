@@ -12,7 +12,7 @@ except StopIteration:
     input("Press enter to exit...")
     exit()
 
-version = "1.0.0"
+version = "1.0.1"
 
 
 def ascii_header():
