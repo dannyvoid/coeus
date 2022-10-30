@@ -85,7 +85,7 @@ def autocomplete(
 
 def main():
     try:
-        set_window(config["ui"]["columns"], config["ui"]["lines"])
+        set_window(config["window"]["columns"], config["window"]["lines"])
         os.system("cls")
         os.system("color 0a")
         os.system(f"title Coeus ({version})")
