@@ -3,4 +3,4 @@ root = "path/to/your/root"
 ratio_threshold = 56
 
 [dev]
-version = "1.0.7"
+version = "1.0.8"
