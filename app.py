@@ -1,4 +1,4 @@
-import os, random, string
+import os
 from fuzzywuzzy import fuzz
 import tomli
 
@@ -27,25 +27,17 @@ except StopIteration:
 version = config["dev"]["version"]
 
 
-def ascii_header():
-    header = r"""
- ▄████▄  ▒█████ ▓█████ █    ██  ██████ 
-▒██▀ ▀█ ▒██▒  ██▓█   ▀ ██  ▓██▒██    ▒ 
-▒▓█    ▄▒██░  ██▒███  ▓██  ▒██░ ▓██▄   
-▒▓▓▄ ▄██▒██   ██▒▓█  ▄▓▓█  ░██░ ▒   ██▒
-▒ ▓███▀ ░ ████▓▒░▒████▒▒█████▓▒██████▒▒
-░ ░▒ ▒  ░ ▒░▒░▒░░░ ▒░ ░▒▓▒ ▒ ▒▒ ▒▓▒ ▒ ░
-  ░  ▒    ░ ▒ ▒░ ░ ░  ░░▒░ ░ ░░ ░▒  ░ ░
-
-    """
-
-    header += f"\nRoot: {root}\n"
-    header += f"Version: {version}\n"
+def header():
+    header = config["dev"]["ascii"]
+    header += f"\n     Root: {root}\n"
+    header += f"  Version: {version}\n"
 
     return header
 
 
 def random_alphanumeric(length: int):
+    import random, string
+
     opts = string.ascii_lowercase + string.digits
     return random.choice(opts) * length
 
@@ -94,26 +86,26 @@ def main():
         os.system("cls")
         os.system("color 0a")
         os.system(f"title Coeus ({version})")
-        print(ascii_header())
+        print(header())
         while True:
-            user_input = input(">>> ")
+            user_input = input("  >>> ")
             os.system("cls")
-            print(ascii_header())
-            print(f">>> {user_input}")
+            print(header())
+            print(f"  >>> {user_input}")
             if user_input == "":
-                print("You must type something")
+                print("  You must type something")
             if user_input == "exit" or user_input == "cls":
                 break
             else:
                 matches = autocomplete(dirs, user_input)
                 print("")
                 if not matches:
-                    print("No matches found")
+                    print("  No matches found")
                 for match, ratio in matches.items():
                     if any(ratio[0] == 100 for ratio in matches.values()):
-                        print(f"{ratio[0]:3}: {match}")
+                        print(f"  {ratio[0]:3}: {match}")
                     else:
-                        print(f"{ratio[0]}: {match}")
+                        print(f"  {ratio[0]}: {match}")
                 print("")
 
     except KeyboardInterrupt:
