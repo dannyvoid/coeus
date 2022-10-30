@@ -9,7 +9,7 @@ with open("config.toml", "rb") as f:
     except tomli.TOMLDecodeError as e:
         print(e)
         print("config.toml is invalid")
-        input("Press enter to continue...")
+        input("Press enter to exit...")
         exit(1)
 
 try:
@@ -26,11 +26,14 @@ except StopIteration:
 version = config["dev"]["version"]
 
 
+def set_window(columns, lines):
+    os.system(f"mode con: cols={columns} lines={lines}")
+
+
 def header():
     header = config["dev"]["ascii"]
     header += f"\n     Root: {root}\n"
     header += f"  Version: {version}\n"
-
     return header
 
 
@@ -82,6 +85,7 @@ def autocomplete(
 
 def main():
     try:
+        set_window(config["ui"]["columns"], config["ui"]["lines"])
         os.system("cls")
         os.system("color 0a")
         os.system(f"title Coeus ({version})")
