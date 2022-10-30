@@ -6,6 +6,7 @@ import tomli
 with open("config.toml", "rb") as f:
     try:
         config = tomli.load(f)
+
     except tomli.TOMLDecodeError as e:
         print(e)
         print("config.toml is invalid")
@@ -38,6 +39,9 @@ def ascii_header():
   ░  ▒    ░ ▒ ▒░ ░ ░  ░░▒░ ░ ░░ ░▒  ░ ░
 
     """
+
+    header += f"\nRoot: {root}\n"
+    header += f"Version: {version}\n"
 
     return header
 
@@ -92,10 +96,12 @@ def main():
         os.system("color 0a")
         os.system(f"title Coeus ({version})")
         print(ascii_header())
-        print(f"Version: {version}\n")
-
         while True:
+
             user_input = input(">>> ")
+            os.system("cls")
+            print(ascii_header())
+            print(f">>> {user_input}")
             if user_input == "":
                 print("You must type something")
             if user_input == "exit" or user_input == "cls":
