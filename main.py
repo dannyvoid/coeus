@@ -1,7 +1,13 @@
 import os, random, string
 from fuzzywuzzy import fuzz
+import tomli
 
-root = "path/to/your/root"
+
+with open("config.toml", "rb") as f:
+    config = tomli.load(f)
+
+
+root = config["user"]["root"]
 root = os.path.normpath(root)
 
 try:
@@ -12,7 +18,7 @@ except StopIteration:
     input("Press enter to exit...")
     exit()
 
-version = "1.0.2"
+version = config["app"]["version"]
 
 
 def ascii_header():
@@ -41,7 +47,9 @@ def get_fuzz_ratio(string_1, string_2):
     return fuzz.token_set_ratio(string_1, string_2)
 
 
-def autocomplete(options, user_input, ratio_threshold=56):
+def autocomplete(
+    options, user_input, ratio_threshold=config["user"]["ratio_threshold"]
+):
     # 56 is the default ratio threshold
     # it can be changed by the user
     # but anything below seemed to just be noise
@@ -106,4 +114,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(e)
+        input("Press enter to continue...")
