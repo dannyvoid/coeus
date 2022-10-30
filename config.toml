@@ -2,5 +2,5 @@
 root = "path/to/your/root"
 ratio_threshold = 56
 
-[app]
-version = "1.0.5"
+[dev]
+version = "1.0.6"
