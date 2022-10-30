@@ -2,7 +2,16 @@ import os, random, string
 from fuzzywuzzy import fuzz
 
 root = "path/to/your/root"
-dirs = next(os.walk(root))[1]
+root = os.path.normpath(root)
+
+try:
+    dirs = next(os.walk(root))[1]
+except StopIteration:
+    print("No directories found or root is invalid!")
+    print(f"Root: {root}")
+    input("Press enter to exit...")
+    exit()
+
 version = "1.0.0"
 
 
