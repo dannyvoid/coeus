@@ -12,7 +12,7 @@ except StopIteration:
     input("Press enter to exit...")
     exit()
 
-version = "1.0.1"
+version = "1.0.2"
 
 
 def ascii_header():
@@ -42,6 +42,9 @@ def get_fuzz_ratio(string_1, string_2):
 
 
 def autocomplete(options, user_input, ratio_threshold=56):
+    # 56 is the default ratio threshold
+    # it can be changed by the user
+    # but anything below seemed to just be noise
     matches = {}
     for match in options:
         ratio = get_fuzz_ratio(user_input, match)
