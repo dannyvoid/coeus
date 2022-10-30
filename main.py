@@ -4,19 +4,25 @@ import tomli
 
 
 with open("config.toml", "rb") as f:
-    config = tomli.load(f)
+    try:
+        config = tomli.load(f)
+    except tomli.TOMLDecodeError as e:
+        print(e)
+        print("config.toml is invalid")
+        input("Press enter to continue...")
+        exit(1)
 
-
-root = config["user"]["root"]
-root = os.path.normpath(root)
 
 try:
+    root = config["user"]["root"]
+    root = os.path.normpath(root)
     dirs = next(os.walk(root))[1]
+
 except StopIteration:
     print("No directories found or root is invalid!")
     print(f"user root: {root}")
     input("Press enter to exit...")
-    exit()
+    exit(1)
 
 version = config["dev"]["version"]
 
@@ -114,8 +120,4 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        print(e)
-        input("Press enter to continue...")
+    main()
