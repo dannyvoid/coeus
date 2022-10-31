@@ -2,8 +2,13 @@
 root = "path/to/your/root"
 ratio_threshold = 56
 
+[window]
+color = "0a"
+columns = 45
+lines = 45
+
 [dev]
-version = "1.1.2"
+version = "1.1.4"
 ascii = """
 
    ▄████▄  ▒█████ ▓█████ █    ██  ██████ 
@@ -14,7 +19,3 @@ ascii = """
   ░ ░▒ ▒  ░ ▒░▒░▒░░░ ▒░ ░▒▓▒ ▒ ▒▒ ▒▓▒ ▒ ░
     ░  ▒    ░ ▒ ▒░ ░ ░  ░░▒░ ░ ░░ ░▒  ░ ░
     """
-
-[window]
-columns = 45
-lines = 45
