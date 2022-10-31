@@ -1,4 +1,5 @@
-import os, tomli
+import os
+import tomli
 from fuzzywuzzy import fuzz
 
 
@@ -26,8 +27,24 @@ except StopIteration:
 version = config["dev"]["version"]
 
 
-def set_window(columns, lines):
+def set_window(columns, lines, color):
+    import win32gui, win32con
+
+    hwnd = win32gui.GetForegroundWindow()
+    win32gui.SetWindowPos(
+        hwnd,
+        win32con.HWND_TOPMOST,
+        0,
+        0,
+        0,
+        0,
+        win32con.SWP_NOMOVE | win32con.SWP_NOSIZE,
+    )
+    win32gui.SetWindowText(hwnd, f"Coeus ({version})")
+
+    os.system("cls")
     os.system(f"mode con: cols={columns} lines={lines}")
+    os.system(f"color {color}")
 
 
 def header():
@@ -37,8 +54,16 @@ def header():
     return header
 
 
+def sanitize_input(user_input):
+    user_input = user_input.lower()
+    # we need to clean up some edge cases
+    # but can't think of anymore right now
+    return user_input
+
+
 def random_alphanumeric(length: int):
-    import random, string
+    import random
+    import string
 
     opts = string.ascii_lowercase + string.digits
     return random.choice(opts) * length
@@ -47,12 +72,19 @@ def random_alphanumeric(length: int):
 def get_fuzz_ratio(string_1, string_2):
     string_1 = string_1.lower()
     string_2 = string_2.lower()
-    return fuzz.token_set_ratio(string_1, string_2)
+
+    # gotta be better ways within fuzzywuzzy to do this
+    # but this works for now
+    # accuracy is just not good enough for my liking
+
+    ratio = fuzz.token_set_ratio(string_1, string_2)
+    return ratio
 
 
 def autocomplete(
     options, user_input, ratio_threshold=config["user"]["ratio_threshold"]
 ):
+
     # 56 is the default ratio threshold
     # it can be changed by the user
     # but anything below seemed to just be noise
@@ -80,23 +112,27 @@ def autocomplete(
         for k, v in sorted(matches.items(), key=lambda item: item[1][0], reverse=True)
     }
 
-    return matches
+    matches = dict(list(matches.items())[:26])
+
+    if all(ratio[0] == 0 for ratio in matches.values()):
+        return {}
+    else:
+        return matches
 
 
 def main():
     try:
-        set_window(config["window"]["columns"], config["window"]["lines"])
-        os.system("cls")
-        os.system("color 0a")
-        os.system(f"title Coeus ({version})")
+        set_window(
+            config["window"]["columns"],
+            config["window"]["lines"],
+            config["window"]["color"],
+        )
         print(header())
         while True:
-            user_input = input("  >>> ")
+            user_input = sanitize_input(input("  >>> "))
             os.system("cls")
             print(header())
             print(f"  >>> {user_input}")
-            if user_input == "":
-                print("  You must type something")
             if user_input == "exit" or user_input == "cls":
                 break
             else:
@@ -108,7 +144,7 @@ def main():
                     if any(ratio[0] == 100 for ratio in matches.values()):
                         print(f"  {ratio[0]:3}: {match}")
                     else:
-                        print(f"  {ratio[0]}: {match}")
+                        print(f"  {ratio[0]:2}: {match}")
                 print("")
 
     except KeyboardInterrupt:
