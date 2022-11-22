@@ -1,6 +1,5 @@
 import os
 import tomllib
-import win32gui
 from fuzzywuzzy import fuzz
 
 
@@ -28,9 +27,6 @@ version = config["dev"]["version"]
 
 
 def set_window(columns, lines, color):
-    hwnd = win32gui.GetForegroundWindow()
-    win32gui.SetWindowText(hwnd, f"Coeus ({version})")
-
     os.system("cls")
     os.system(f"mode con: cols={columns} lines={lines}")
     os.system(f"color {color}")
