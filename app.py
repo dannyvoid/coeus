@@ -1,13 +1,13 @@
 import os
-import tomli
+import tomllib
+import win32gui
 from fuzzywuzzy import fuzz
 
 
 with open("config.toml", "rb") as f:
     try:
-        config = tomli.load(f)
-
-    except tomli.TOMLDecodeError as e:
+        config = tomllib.load(f)
+    except tomllib.TOMLDecodeError as e:
         print(e)
         print("config.toml is invalid")
         input("Press enter to exit...")
@@ -28,23 +28,13 @@ version = config["dev"]["version"]
 
 
 def set_window(columns, lines, color):
-    import win32gui, win32con
-
     hwnd = win32gui.GetForegroundWindow()
-    win32gui.SetWindowPos(
-        hwnd,
-        win32con.HWND_TOPMOST,
-        0,
-        0,
-        0,
-        0,
-        win32con.SWP_NOMOVE | win32con.SWP_NOSIZE,
-    )
     win32gui.SetWindowText(hwnd, f"Coeus ({version})")
 
     os.system("cls")
     os.system(f"mode con: cols={columns} lines={lines}")
     os.system(f"color {color}")
+    os.system(f"title Coeus ({version})")
 
 
 def header():
@@ -153,6 +143,11 @@ def main():
     except Exception as e:
         print(e)
         input("Press enter to continue...")
+
+    finally:
+        # we need to reset the window, display the cursor,
+        # clear the screen, and make sure the window isn't on top at all times anymore
+        exit(0)
 
 
 if __name__ == "__main__":
